@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Maricarmen - 21 de Septiembre</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+        .background {
+            background: url('/api/placeholder/800/600') no-repeat center center fixed;
+            background-size: cover;
+            height: 100%;
+            position: relative;
+            animation: fadeIn 2s;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            width: 90%;
+            max-width: 600px;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            animation: slideInDown 1s;
+        }
+        p {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            animation: slideInUp 1s;
+        }
+        .heart {
+            color: #ff69b4;
+            font-size: 2em;
+            animation: pulse 1s infinite;
+        }
+        .flower {
+            font-size: 2em;
+            margin: 0 10px;
+            animation: rotate 4s linear infinite;
+            display: inline-block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideInDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideInUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5em; }
+            p { font-size: 1.2em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="overlay"></div>
+        <div class="content">
+            <h1>Maricarmen</h1>
+            <p>En este 21 de septiembre, quiero expresarte todo mi amor</p>
+            <p>
+                <span class="flower">🌻</span>
+                <span class="heart">❤️</span>
+                <span class="flower">🌻</span>
+            </p>
+            <p>Eres el sol que ilumina mis días, tan brillante como estas flores amarillas</p>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Configuración de Three.js (como en la versión anterior)
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Crear partículas de flores
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const textureLoader = new THREE.TextureLoader();
+        const sprite = textureLoader.load('/api/placeholder/32/32'); // Placeholder para la textura de la flor
+
+        for (let i = 0; i < 500; i++) {
+            const x = Math.random() * 2000 - 1000;
+            const y = Math.random() * 2000 - 1000;
+            const z = Math.random() * 2000 - 1000;
+            vertices.push(x, y, z);
+        }
+
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+
+        const material = new THREE.PointsMaterial({
+            size: 20,
+            sizeAttenuation: true,
+            map: sprite,
+            alphaTest: 0.5,
+            transparent: true,
+            color: 0xffff00 // Color amarillo para las flores
+        });
+
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+
+        camera.position.z = 1000;
+
+        // Animación
+        function animate() {
+            requestAnimationFrame(animate);
+            particles.rotation.x += 0.0001;
+            particles.rotation.y += 0.0001;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Ajustar tamaño al cambiar la ventana
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
